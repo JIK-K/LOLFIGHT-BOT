@@ -2,7 +2,7 @@ import { Client } from "discord.js";
 import commands from "./commands";
 
 const BOT_TOKEN =
-  "MTE3NjAxMzQxNTQwODQ4MDI2Ng.GBzlIA.9fTuTjRQeMAhY4QmUNGXh9wS3LqH97bxoPmeq0";
+  "XXX";
 
 const client = new Client({
   intents: [],
