@@ -1,7 +1,6 @@
-// import { fight } from "./fight";
+import { fight } from "./fight";
+import { winner } from "./winner";
 
-import { echo } from "./fight";
-
-const availableCommands = [echo];
+const availableCommands = [fight, winner];
 
 export default availableCommands;
