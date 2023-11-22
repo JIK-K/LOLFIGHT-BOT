@@ -61,10 +61,10 @@ export const fight: SlashCommand = {
     const sendContent = `
       생성자 - ${interaction.user.displayName.toString()}
       📢   **내전 생성**   📢\n
-      🔴 내전명 : ${fightName}\n
-      🟠 팀 A : ${team1}\n
-      🟡 팀 B : ${team2}\n
-      🟢 내전시간 : ${fightTime}`;
+      🔴 **내전명** : ${fightName}\n
+      🟠 **팀 A** : ${team1}\n
+      🟡 **팀 B** : ${team2}\n
+      🟢 **내전시간** : ${fightTime}`;
 
     const noticeChannel = (await interaction.client.channels.fetch(
       "1176823090416730193"

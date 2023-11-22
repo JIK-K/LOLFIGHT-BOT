@@ -49,12 +49,12 @@ export const winner: SlashCommand = {
         )) as Message;
         if (message) {
           const modifiedContent = `
-              📢   **내전 종료**   📢\n
-              🔴 **내전명** : ${fightName}\n
-              🟠 **팀 A** : ${fight.team1}\n
-              🟡 **팀 B** : ${fight.team2}\n
-              🟢 **내전시간*8 : ${fight.fightTime}\n
-              🏆 **Winner**: **${winnerTeam}** 🏆`;
+            📢   **내전 종료**   📢\n
+          🔴 **내전명** : ${fightName}\n
+          🟠 **팀 A** : ${fight.team1}\n
+          🟡 **팀 B** : ${fight.team2}\n
+          🟢 **내전시간** : ${fight.fightTime}\n
+          🏆 **Winner**: **${winnerTeam}** 🏆`;
           await message.edit(modifiedContent);
           fightDataInstance.deleteData(fightName);
           interaction.deleteReply();
