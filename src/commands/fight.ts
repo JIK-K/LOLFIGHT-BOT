@@ -50,10 +50,15 @@ export const fight: SlashCommand = {
     const team2 = team2Option.value as string;
     const fightTime = fightTimeOption.value as number;
 
-    const messageData = `📢   **내전 생성**   📢\n\n🔴 내전명 : ${fightName}\n🟠 팀 A : ${team1}\n🟡 팀 B : ${team2} \n🟢 내전시간 : ${fightTime}\n`;
     const sendMessage = await interaction.followUp({
       ephemeral: true,
-      content: `✅ ${interaction.user.displayName.toString()} 내전 생성 완료 ✅ \n\n ${messageData}`,
+      content: `
+      생성자 - ${interaction.user.displayName.toString()}
+      📢   **내전 생성**   📢\n\n
+      🔴 내전명 : ${fightName}\n
+      🟠 팀 A : ${team1}\n
+      🟡 팀 B : ${team2}\n
+      🟢 내전시간 : ${fightTime}`,
     });
 
     const messageId = sendMessage.id;

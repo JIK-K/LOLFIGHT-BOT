@@ -28,6 +28,9 @@ class FightDataSingleton {
   getData(): FightData {
     return this.data;
   }
+  deleteData(fightName: string): void {
+    delete this.data[fightName];
+  }
 }
 const fightDataInstance = FightDataSingleton.getInstance();
 
