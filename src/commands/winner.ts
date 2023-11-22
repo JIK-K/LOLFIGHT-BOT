@@ -3,8 +3,8 @@ import { SlashCommand } from "../types/slashCommand";
 import { fightDataInstance } from "../data/fightData";
 
 const fightData = fightDataInstance.getData();
-const targetChannelId = "1175701624866471986";
-const NOTICE_CHANNEL = process.env.NOTICE_CHANNEL;
+const NOTICE_CHANNEL: string =
+  process.env.NOTICE_CHANNEL || "1176823090416730193";
 
 export const winner: SlashCommand = {
   name: "내전우승",
@@ -30,7 +30,7 @@ export const winner: SlashCommand = {
     if (!fightNameOption || !winnerTeamOption) {
       await interaction.followUp({
         ephemeral: true,
-        content: `❌ 무튼 오류임 ㅅㄱ ❌`,
+        content: `❌ 미입력 확인 ❌`,
       });
       return;
     }
@@ -41,7 +41,7 @@ export const winner: SlashCommand = {
 
     if (fight) {
       const channel = (await interaction.client.channels.fetch(
-        targetChannelId
+        NOTICE_CHANNEL
       )) as TextChannel;
       if (channel) {
         const message = (await channel.messages.fetch(
@@ -49,12 +49,12 @@ export const winner: SlashCommand = {
         )) as Message;
         if (message) {
           const modifiedContent = `
-              📢   **내전 종료**   📢\n\n
-              🔴 내전명 : ${fightName}\n
-              🟠 팀 A : ${fight.team1}\n
-              🟡 팀 B : ${fight.team2}\n
-              🟢 내전시간 : ${fight.fightTime}\n
-              🏆 Winner: ${winnerTeam} 🏆`;
+              📢   **내전 종료**   📢\n
+              🔴 **내전명** : ${fightName}\n
+              🟠 **팀 A** : ${fight.team1}\n
+              🟡 **팀 B** : ${fight.team2}\n
+              🟢 **내전시간*8 : ${fight.fightTime}\n
+              🏆 **Winner**: **${winnerTeam}** 🏆`;
           await message.edit(modifiedContent);
           fightDataInstance.deleteData(fightName);
           interaction.deleteReply();

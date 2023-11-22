@@ -1,4 +1,4 @@
-import { ApplicationCommandOptionType } from "discord.js";
+import { ApplicationCommandOptionType, TextChannel } from "discord.js";
 import { SlashCommand } from "../types/slashCommand";
 import { fightDataInstance } from "../data/fightData";
 
@@ -27,8 +27,8 @@ export const fight: SlashCommand = {
     {
       required: true,
       name: "내전시간",
-      description: "내전시간을 작성합니다",
-      type: ApplicationCommandOptionType.Integer,
+      description: "내전시간을 작성합니다 (ex: 2023/12/25 22:30)",
+      type: ApplicationCommandOptionType.String,
     },
   ],
   execute: async (_, interaction) => {
@@ -40,7 +40,7 @@ export const fight: SlashCommand = {
     if (!fightNameOption || !team1Option || !team2Option || !fightTimeOption) {
       await interaction.followUp({
         ephemeral: true,
-        content: `❌ 무튼 오류임 ㅅㄱ ❌`,
+        content: `❌ 미입력 확인 ❌`,
       });
       return;
     }
@@ -50,24 +50,38 @@ export const fight: SlashCommand = {
     const team2 = team2Option.value as string;
     const fightTime = fightTimeOption.value as number;
 
-    const sendMessage = await interaction.followUp({
-      ephemeral: true,
-      content: `
+    if (fightDataInstance.exists(fightName)) {
+      await interaction.followUp({
+        ephemeral: true,
+        content: `❌ 이미 존재하는 내전명입니다 ❌`,
+      });
+      return;
+    }
+
+    const sendContent = `
       생성자 - ${interaction.user.displayName.toString()}
-      📢   **내전 생성**   📢\n\n
+      📢   **내전 생성**   📢\n
       🔴 내전명 : ${fightName}\n
       🟠 팀 A : ${team1}\n
       🟡 팀 B : ${team2}\n
-      🟢 내전시간 : ${fightTime}`,
-    });
+      🟢 내전시간 : ${fightTime}`;
 
-    const messageId = sendMessage.id;
+    const noticeChannel = (await interaction.client.channels.fetch(
+      "1176823090416730193"
+    )) as TextChannel;
 
-    fightDataInstance.setData(fightName, {
-      team1: team1,
-      team2: team2,
-      fightTime: fightTime,
-      messageId: messageId,
-    });
+    if (noticeChannel) {
+      const sendMessage = await noticeChannel.send(sendContent);
+      const messageId = sendMessage.id;
+
+      fightDataInstance.setData(fightName, {
+        team1: team1,
+        team2: team2,
+        fightTime: fightTime,
+        messageId: messageId,
+      });
+
+      interaction.deleteReply();
+    }
   },
 };

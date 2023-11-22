@@ -2,7 +2,7 @@ interface FightData {
   [figntName: string]: {
     team1: string;
     team2: string;
-    fightTime: number;
+    fightTime: string;
     messageId: string;
   };
 }
@@ -30,6 +30,9 @@ class FightDataSingleton {
   }
   deleteData(fightName: string): void {
     delete this.data[fightName];
+  }
+  exists(fightName: string): boolean {
+    return this.data.hasOwnProperty(fightName);
   }
 }
 const fightDataInstance = FightDataSingleton.getInstance();

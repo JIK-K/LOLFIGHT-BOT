@@ -1,6 +1,6 @@
 import { fight } from "./fight";
 import { winner } from "./winner";
-
-const availableCommands = [fight, winner];
+import { deleteFight } from "./deleteFight";
+const availableCommands = [fight, winner, deleteFight];
 
 export default availableCommands;
