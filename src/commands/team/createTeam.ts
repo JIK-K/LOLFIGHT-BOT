@@ -1,7 +1,10 @@
-import { ApplicationCommandOptionType, Client, TextChannel } from "discord.js";
+import {
+  ApplicationCommandOptionType,
+  Client,
+  TextChannel,
+  Permissions,
+} from "discord.js";
 import { SlashCommand } from "../../types/slashCommand";
-
-const client = new Client({ intents: [Intents.FLAGS.GUILD_MESSAGES] });
 
 export const createTeam: SlashCommand = {
   name: "팀생성",
@@ -9,14 +12,13 @@ export const createTeam: SlashCommand = {
   options: [
     {
       required: true,
-      name: "내전명",
-      description: "내전명을 작성합니다",
+      name: "팀명",
+      description: "생성할 팀명을 작성합니다",
       type: ApplicationCommandOptionType.String,
     },
   ],
   execute: async (_, interaction) => {
-    const teamNameOption = interaction.options.get("내전명");
-
+    const teamNameOption = interaction.options.get("팀명");
     if (!teamNameOption) {
       await interaction.followUp({
         ephemeral: true,
@@ -26,18 +28,47 @@ export const createTeam: SlashCommand = {
     }
 
     const teamName = teamNameOption.value as string;
+    const role = interaction.guild?.roles.cache.find(
+      (role) => role.name === teamName
+    );
+    if (role) {
+      await interaction.followUp({
+        ephemeral: true,
+        content: `❌ 이미 존재하는 팀명입니다 ❌`,
+      });
+      return;
+    }
 
-    //이미존재하는 팀명입니다
+    // const member = interaction.guild?.members.cache.get(interaction.user.id);
+    // if (member?.roles.cache.some((role) => role.name === teamName)) {
+    //   await interaction.followUp({
+    //     ephemeral: true,
+    //     content: `❌ 이미 해당 팀에 속해있습니다 ❌`,
+    //   });
+    //   return;
+    // }
 
-    const guild = client.guilds.cache.get(guildId);
-
-    const { PermissionsBitField } = require("discord.js");
-
-    guild.roles.create({
-      name: "Mod",
+    const totalRole = await interaction.guild!.roles.create({
+      name: teamName,
+      color: "#ff0000",
       permissions: [
-        PermissionsBitField.Flags.SendMessages,
-        PermissionsBitField.Flags.KickMembers,
+        "ViewChannel",
+        "CreateInstantInvite",
+        "ChangeNickname",
+        "SendMessages",
+        "EmbedLinks",
+        "AttachFiles",
+        "AddReactions",
+        "ReadMessageHistory",
+        "UseApplicationCommands",
+        "Connect",
+        "Speak",
+        "Stream",
+        "UseVAD",
+        "MuteMembers",
+        "DeafenMembers",
+        "MoveMembers",
+        // "ManageEvents",
       ],
     });
 
@@ -45,12 +76,11 @@ export const createTeam: SlashCommand = {
       ✅ ${interaction.user.displayName.toString()} 님이 ${teamName} 팀을 생성 하셨습니다.`;
 
     const noticeChannel = (await interaction.client.channels.fetch(
-      "1176823090416730193"
+      "1175701624866471986"
     )) as TextChannel;
 
     if (noticeChannel) {
       const sendMessage = await noticeChannel.send(sendContent);
-      const messageId = sendMessage.id;
 
       interaction.deleteReply();
     }
