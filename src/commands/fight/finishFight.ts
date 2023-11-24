@@ -1,12 +1,12 @@
 import { ApplicationCommandOptionType, Message, TextChannel } from "discord.js";
-import { SlashCommand } from "../types/slashCommand";
-import { fightDataInstance } from "../data/fightData";
+import { SlashCommand } from "../../types/slashCommand";
+import { fightDataInstance } from "../../data/fightData";
 
 const fightData = fightDataInstance.getData();
 const NOTICE_CHANNEL: string =
   process.env.NOTICE_CHANNEL || "1176823090416730193";
 
-export const winner: SlashCommand = {
+export const finishFight: SlashCommand = {
   name: "내전우승",
   description: "내전 승자를 결정합니다",
   options: [

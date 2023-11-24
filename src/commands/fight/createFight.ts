@@ -1,8 +1,8 @@
 import { ApplicationCommandOptionType, TextChannel } from "discord.js";
-import { SlashCommand } from "../types/slashCommand";
-import { fightDataInstance } from "../data/fightData";
+import { SlashCommand } from "../../types/slashCommand";
+import { fightDataInstance } from "../../data/fightData";
 
-export const fight: SlashCommand = {
+export const createFight: SlashCommand = {
   name: "내전생성",
   description: "내전을 생성합니다",
   options: [

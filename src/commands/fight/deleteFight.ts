@@ -1,6 +1,6 @@
 import { ApplicationCommandOptionType, TextChannel } from "discord.js";
-import { SlashCommand } from "../types/slashCommand";
-import { fightDataInstance } from "../data/fightData";
+import { SlashCommand } from "../../types/slashCommand";
+import { fightDataInstance } from "../../data/fightData";
 
 const NOTICE_CHANNEL: string =
   process.env.NOTICE_CHANNEL || "1176823090416730193";
