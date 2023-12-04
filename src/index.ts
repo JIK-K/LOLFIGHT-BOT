@@ -49,39 +49,6 @@ const startBot = async () => {
       }
     }
   });
-
-  // name: string;
-  // scheduledStartTime: DateResolvable;
-  // scheduledEndTime?: DateResolvable;
-  // privacyLevel: GuildScheduledEventPrivacyLevel;
-  // entityType: GuildScheduledEventEntityType;
-  // description?: string;
-  // channel?: GuildVoiceChannelResolvable;
-  // entityMetadata?: GuildScheduledEventEntityMetadataOptions;
-  // image?: BufferResolvable | Base64Resolvable | null;
-  // reason?: string;
-
-  // const futureStartTime = new Date(now.getTime() + 24 * 60 * 60 * 1000); // 24 hours from now
-  // const futureEndTime = new Date(futureStartTime.getTime() + 2 * 60 * 60 * 1000); // 2 hours after futureStartTime
-  const now = new Date();
-  const startTime = new Date(now.getTime() + 24 * 60 * 60 * 1000);
-  const finishTime = new Date(startTime.getTime() + 2 * 60 * 60 * 1000);
-  const privacyLevel: GuildScheduledEventPrivacyLevel = 2;
-  const entityType: GuildScheduledEventEntityType = 2;
-  const options: GuildScheduledEventCreateOptions = {
-    name: "test",
-    scheduledStartTime: startTime,
-    scheduledEndTime: finishTime,
-    privacyLevel: privacyLevel,
-    entityType: entityType,
-    description: "test description",
-    channel: "1175700332198756452",
-  };
-
-  const guild = client.guilds.cache.get("1090831238538985596");
-  guild?.scheduledEvents.create(options).then((createEvnent) => {
-    console.log(`create event id : ${createEvnent.id}`);
-  });
 };
 
 startBot();
