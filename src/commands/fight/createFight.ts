@@ -68,7 +68,6 @@ export const createFight: SlashCommand = {
 
     const dateRegex = /^\d{4}\/\d{2}\/\d{2}\s\d{2}:\d{2}$/;
     if (!dateRegex.test(fightTime)) {
-      // 유효하지 않은 날짜 형식인 경우
       await interaction.followUp({
         ephemeral: true,
         content: `❌ 잘못된 시간 형식입니다. (ex: 2023/12/25 22:30) ❌`,
@@ -107,14 +106,9 @@ export const createFight: SlashCommand = {
     // image?: BufferResolvable | Base64Resolvable | null;
     // reason?: string;
 
-    const targetTime = new Date(fightTime);
-    console.log(targetTime);
-
     const guildId = interaction.guild!.id;
     const guild = interaction.client.guilds.cache.get(guildId);
-    // const now = new Date();
-    // const startTime = new Date(now.getTime() + 24 * 60 * 60 * 1000);
-    const startTime = new Date(targetTime.getTime());
+    const startTime = new Date(targetDate.getTime());
     const finishTime = new Date(startTime.getTime() + 2 * 60 * 60 * 1000);
     const privacyLevel: GuildScheduledEventPrivacyLevel = 2;
     const entityType: GuildScheduledEventEntityType = 2;
