@@ -14,6 +14,9 @@ export const deleteTeam: SlashCommand = {
   ],
   execute: async (_, interaction) => {
     const teamNameOption = interaction.options.get("팀명");
+
+    //1183565251891961988
+
     if (!teamNameOption) {
       await interaction.followUp({
         ephemeral: true,
@@ -21,15 +24,24 @@ export const deleteTeam: SlashCommand = {
       });
       return;
     }
-
     const teamName = teamNameOption.value as string;
     const existTeam = interaction.guild?.roles.cache.find(
       (team) => team.name === teamName
     );
+
     if (!existTeam) {
       await interaction.followUp({
         ephemeral: true,
         content: `❌ 존재하지 않는 팀명입니다 ❌`,
+      });
+      return;
+    }
+
+    const member = interaction.guild?.members.cache.get(interaction.user.id);
+    if (!member?.guild.roles.cache.has(existTeam.id)) {
+      await interaction.followUp({
+        ephemeral: true,
+        content: `❌ 삭제하려는 팀의 구성원이 아닙니다. ❌`,
       });
       return;
     } else {
