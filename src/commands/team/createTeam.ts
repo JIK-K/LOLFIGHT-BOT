@@ -69,6 +69,8 @@ export const createTeam: SlashCommand = {
             ],
           });
 
+          totalRole.setHoist(true);
+
           const userid = String(interaction.member?.user.id);
           const newMember = interaction.guild?.members.cache.get(userid);
           if (newMember && totalRole) {

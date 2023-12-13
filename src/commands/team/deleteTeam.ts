@@ -15,8 +15,6 @@ export const deleteTeam: SlashCommand = {
   execute: async (_, interaction) => {
     const teamNameOption = interaction.options.get("팀명");
 
-    //1183565251891961988
-
     if (!teamNameOption) {
       await interaction.followUp({
         ephemeral: true,
