@@ -1,5 +1,6 @@
 import {
   Client,
+  GatewayIntentBits,
   GuildScheduledEventCreateOptions,
   Interaction,
 } from "discord.js";
@@ -12,7 +13,12 @@ import {
 const BOT_TOKEN = process.env.BOT_TOKEN;
 
 const client = new Client({
-  intents: [],
+  intents: [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.MessageContent,
+    GatewayIntentBits.GuildMembers,
+  ],
 });
 
 const startBot = async () => {

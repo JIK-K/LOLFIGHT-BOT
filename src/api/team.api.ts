@@ -76,6 +76,10 @@ export const patchTeam = async (teamName: string) => {
   }
 };
 
+/**
+ * @팀삭제
+ * @param teamName
+ */
 export const removeTeam = async (teamName: string) => {
   try {
     const deletedTeam = await prisma.team.delete({
