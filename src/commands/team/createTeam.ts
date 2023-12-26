@@ -1,5 +1,22 @@
-import { ApplicationCommandOptionType, TextChannel } from "discord.js";
+import {
+  ApplicationCommandOptionType,
+  ColorResolvable,
+  TextChannel,
+} from "discord.js";
 import { SlashCommand } from "../../types/slashCommand";
+import { postTeam } from "../../api/team.api";
+
+const getRandomColor = (): ColorResolvable => {
+  const r = Math.floor(Math.random() * 256); // 0부터 255 사이의 임의의 빨강 값
+  const g = Math.floor(Math.random() * 256); // 0부터 255 사이의 임의의 초록 값
+  const b = Math.floor(Math.random() * 256); // 0부터 255 사이의 임의의 파랑 값
+
+  const color = `#${r.toString(16).padStart(2, "0")}${g
+    .toString(16)
+    .padStart(2, "0")}${b.toString(16).padStart(2, "0")}`;
+  const colordata: ColorResolvable = color as ColorResolvable;
+  return colordata;
+};
 
 export const createTeam: SlashCommand = {
   name: "팀생성",
@@ -46,9 +63,10 @@ export const createTeam: SlashCommand = {
             content: `❌ 이미 팀에 속해있습니다 ❌`,
           });
         } else {
+          const randomColor: ColorResolvable = getRandomColor();
           const totalRole = await interaction.guild!.roles.create({
             name: teamName,
-            color: "#ff0000",
+            color: randomColor,
             permissions: [
               "ViewChannel",
               "CreateInstantInvite",
@@ -89,6 +107,7 @@ export const createTeam: SlashCommand = {
             await noticeChannel.send(sendContent);
             interaction.deleteReply();
           }
+          postTeam(teamName);
         }
       }
     }

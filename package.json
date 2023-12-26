@@ -4,6 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
+    "@prisma/client": "5.7.0",
     "@types/node": "^20.10.4",
     "discord-api-types": "^0.37.65",
     "discord.js": "^14.14.1",

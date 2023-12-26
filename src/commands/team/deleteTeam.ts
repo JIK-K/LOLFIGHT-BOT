@@ -1,5 +1,6 @@
 import { ApplicationCommandOptionType, TextChannel } from "discord.js";
 import { SlashCommand } from "../../types/slashCommand";
+import { removeTeam } from "../../api/team.api";
 
 export const deleteTeam: SlashCommand = {
   name: "팀삭제",
@@ -48,6 +49,7 @@ export const deleteTeam: SlashCommand = {
         ephemeral: true,
         content: `✅ ${existTeam.name} 팀을 삭제했습니다 `,
       });
+      removeTeam(teamName);
     }
   },
 };

@@ -15,14 +15,6 @@ const client = new Client({
   intents: [],
 });
 
-const stopBot = async () => {
-  await client.destroy(); // Discord 봇 연결 해제
-  console.log("info: Discord bot stopped");
-
-  console.log("info: Stopping TypeScript...");
-  process.exit(0); // TypeScript 프로세스 종료
-};
-
 const startBot = async () => {
   await client.login(BOT_TOKEN);
   console.info("info: login success!");
