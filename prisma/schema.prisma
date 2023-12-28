@@ -10,7 +10,14 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Team{
+model Team {
   id Int @id @default(autoincrement())
   name String @unique
+  numberMembers Int @default(0)
+}
+
+model Member {
+  id Int @id @default(autoincrement())
+  name String 
+  team String?
 }

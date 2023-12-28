@@ -55,7 +55,7 @@ export const getTeamList = async () => {
 };
 
 /**
- * @팀명변경 아직미완
+ * @팀수정 아직미완
  * @param teamName
  */
 export const patchTeam = async (teamName: string) => {
