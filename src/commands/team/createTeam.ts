@@ -56,7 +56,7 @@ export const createTeam: SlashCommand = {
       const roles = member?.guild?.roles.cache;
       if (roles) {
         const memberRoles = Array.from(member?.guild?.roles.cache.values());
-        const hasRoles = memberRoles.length > 0;
+        const hasRoles = memberRoles.length > 2;
         if (hasRoles) {
           await interaction.followUp({
             ephemeral: true,

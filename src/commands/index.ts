@@ -4,6 +4,8 @@ import { deleteFight } from "./fight/deleteFight";
 import { createTeam } from "./team/createTeam";
 import { deleteTeam } from "./team/deleteTeam";
 import { inviteTeam } from "./team/inviteTeam";
+import { leaveTeam } from "./team/leaveTeam";
+
 const availableCommands = [
   createFight,
   finishFight,
@@ -11,6 +13,7 @@ const availableCommands = [
   createTeam,
   deleteTeam,
   inviteTeam,
+  leaveTeam,
 ];
 
 export default availableCommands;
