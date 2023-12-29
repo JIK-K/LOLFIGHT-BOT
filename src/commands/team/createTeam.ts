@@ -4,7 +4,8 @@ import {
   TextChannel,
 } from "discord.js";
 import { SlashCommand } from "../../types/slashCommand";
-import { postTeam } from "../../api/team.api";
+import { patchPlusTeamMember, postTeam } from "../../api/team.api";
+import { postTeamMember } from "../../api/team-member.api";
 
 const getRandomColor = (): ColorResolvable => {
   const r = Math.floor(Math.random() * 256); // 0부터 255 사이의 임의의 빨강 값
@@ -39,6 +40,7 @@ export const createTeam: SlashCommand = {
       return;
     }
 
+    const userName = interaction.user.displayName as string;
     const teamName = teamNameOption.value as string;
     const role = interaction.guild?.roles.cache.find(
       (role) => role.name === teamName
@@ -108,6 +110,7 @@ export const createTeam: SlashCommand = {
             interaction.deleteReply();
           }
           postTeam(teamName);
+          postTeamMember(userName, teamName);
         }
       }
     }

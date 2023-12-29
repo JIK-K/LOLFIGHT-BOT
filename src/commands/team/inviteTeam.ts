@@ -1,5 +1,7 @@
 import { ApplicationCommandOptionType, GuildMember } from "discord.js";
 import { SlashCommand } from "../../types/slashCommand";
+import { patchPlusTeamMember } from "../../api/team.api";
+import { postTeamMember } from "../../api/team-member.api";
 
 export const inviteTeam: SlashCommand = {
   name: "팀초대",
@@ -56,6 +58,8 @@ export const inviteTeam: SlashCommand = {
                 ephemeral: true,
                 content: `✅ ${inviteName} 님이 팀에 초대되었습니다! ✅`,
               });
+              postTeamMember(invitedMember.displayName, inviterUserRole.name);
+              patchPlusTeamMember(inviterUserRole.name);
             } else {
               await interaction.followUp({
                 ephemeral: true,

@@ -55,22 +55,48 @@ export const getTeamList = async () => {
 };
 
 /**
- * @팀수정 아직미완
+ * @팀인원증가
  * @param teamName
  */
-export const patchTeam = async (teamName: string) => {
+export const patchPlusTeamMember = async (teamName: string) => {
   try {
-    const updatedUser = await prisma.team.update({
+    const updatedTeam = await prisma.team.update({
       where: {
-        name: "teamName",
+        name: teamName,
       },
       data: {
-        name: "Updated Name",
+        numberMembers: {
+          increment: 1,
+        },
       },
     });
-    console.log("Updated user:", updatedUser);
+    console.log("Updated team number members:", updatedTeam);
   } catch (error) {
-    console.error("Error updating user:", error);
+    console.error("Error updating team number members:", error);
+  } finally {
+    await prisma.$disconnect();
+  }
+};
+
+/**
+ * @팀인원감소
+ * @param teamName
+ */
+export const patchSubtractTeamMember = async (teamName: string) => {
+  try {
+    const updatedTeam = await prisma.team.update({
+      where: {
+        name: teamName,
+      },
+      data: {
+        numberMembers: {
+          decrement: 1,
+        },
+      },
+    });
+    console.log("Updated team number members:", updatedTeam);
+  } catch (error) {
+    console.error("Error updating team number members:", error);
   } finally {
     await prisma.$disconnect();
   }

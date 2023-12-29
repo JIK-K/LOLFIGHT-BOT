@@ -13,11 +13,13 @@ datasource db {
 model Team {
   id Int @id @default(autoincrement())
   name String @unique
-  numberMembers Int @default(0)
+  numberMembers Int @default(1)
+  members Team_Member[] // Team과 Team_Member 간의 관계 설정
 }
 
-model Member {
+model Team_Member {
   id Int @id @default(autoincrement())
-  name String 
-  team String?
+  name String @unique 
+  team Team? @relation(fields: [teamName], references: [name], onDelete: Cascade)
+  teamName String? // Team 테이블의 name을 참조
 }
