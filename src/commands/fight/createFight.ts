@@ -105,7 +105,7 @@ export const createFight: SlashCommand = {
     // entityMetadata?: GuildScheduledEventEntityMetadataOptions;
     // image?: BufferResolvable | Base64Resolvable | null;
     // reason?: string;
-
+    const descriptionText = team1 + "vs" + team2 + "내전";
     const guildId = interaction.guild!.id;
     const guild = interaction.client.guilds.cache.get(guildId);
     const startTime = new Date(targetDate.getTime());
@@ -113,12 +113,12 @@ export const createFight: SlashCommand = {
     const privacyLevel: GuildScheduledEventPrivacyLevel = 2;
     const entityType: GuildScheduledEventEntityType = 2;
     const options: GuildScheduledEventCreateOptions = {
-      name: "test",
+      name: fightName,
       scheduledStartTime: startTime,
       scheduledEndTime: finishTime,
       privacyLevel: privacyLevel,
       entityType: entityType,
-      description: "test description",
+      description: descriptionText,
       channel: "1175700332198756452",
     };
 
