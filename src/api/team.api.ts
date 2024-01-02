@@ -33,6 +33,7 @@ export const getTeam = async (teamName: string) => {
       },
     });
     console.log("Team found by name:", team);
+    return team;
   } catch (error) {
     console.error("Error fetching team by name:", error);
   } finally {

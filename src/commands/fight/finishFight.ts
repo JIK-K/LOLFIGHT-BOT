@@ -1,8 +1,7 @@
 import { ApplicationCommandOptionType, Message, TextChannel } from "discord.js";
 import { SlashCommand } from "../../types/slashCommand";
-import { fightDataInstance } from "../../data/fightData";
+import { getFight } from "../../api/fight.api";
 
-const fightData = fightDataInstance.getData();
 const NOTICE_CHANNEL: string =
   process.env.NOTICE_CHANNEL || "1176823090416730193";
 
@@ -37,7 +36,7 @@ export const finishFight: SlashCommand = {
 
     const fightName = fightNameOption.value as string;
     const winnerTeam = winnerTeamOption.value as string;
-    const fight = fightData[fightName];
+    const fight = await getFight(fightName);
 
     if (fight) {
       const channel = (await interaction.client.channels.fetch(
@@ -51,12 +50,12 @@ export const finishFight: SlashCommand = {
           const modifiedContent = `
           📢   **내전 종료**   📢\n
           🔴 **내전명** : ${fightName}\n
-          🟠 **팀 A** : ${fight.team1}\n
-          🟡 **팀 B** : ${fight.team2}\n
+          🟠 **팀 A** : ${fight.homeTeam}\n
+          🟡 **팀 B** : ${fight.awayTeam}\n
           🟢 **내전시간** : ${fight.fightTime}\n
           🏆 **Winner**: **${winnerTeam}** 🏆`;
           await message.edit(modifiedContent);
-          fightDataInstance.deleteData(fightName);
+
           interaction.deleteReply();
         }
       } else {

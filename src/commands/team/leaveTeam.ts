@@ -1,3 +1,4 @@
+import { removeTeamMember } from "../../api/team-member.api";
 import { patchSubtractTeamMember } from "../../api/team.api";
 import { SlashCommand } from "../../types/slashCommand";
 import { ApplicationCommandOptionType, Role } from "discord.js";
@@ -55,6 +56,7 @@ export const leaveTeam: SlashCommand = {
           content: `✅ ${teamName} 팀에서 탈퇴했습니다 ✅`,
         });
         patchSubtractTeamMember(teamName);
+        removeTeamMember(interaction.user.username);
       } else {
         await interaction.followUp({
           ephemeral: true,

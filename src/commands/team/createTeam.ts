@@ -5,7 +5,7 @@ import {
 } from "discord.js";
 import { SlashCommand } from "../../types/slashCommand";
 import { patchPlusTeamMember, postTeam } from "../../api/team.api";
-import { postTeamMember } from "../../api/team-member.api";
+import { getTeamMember, postTeamMember } from "../../api/team-member.api";
 
 const getRandomColor = (): ColorResolvable => {
   const r = Math.floor(Math.random() * 256); // 0부터 255 사이의 임의의 빨강 값
@@ -57,13 +57,15 @@ export const createTeam: SlashCommand = {
     if (member) {
       const roles = member?.guild?.roles.cache;
       if (roles) {
-        const memberRoles = Array.from(member?.guild?.roles.cache.values());
-        const hasRoles = memberRoles.length > 2;
+        // const memberRoles = Array.from(member?.guild?.roles.cache.values());
+        // const hasRoles = memberRoles.length > 2;
+        const hasRoles = await getTeamMember(interaction.user.displayName);
         if (hasRoles) {
           await interaction.followUp({
             ephemeral: true,
             content: `❌ 이미 팀에 속해있습니다 ❌`,
           });
+          return;
         } else {
           const randomColor: ColorResolvable = getRandomColor();
           const totalRole = await interaction.guild!.roles.create({

@@ -1,7 +1,7 @@
 import { ApplicationCommandOptionType, GuildMember } from "discord.js";
 import { SlashCommand } from "../../types/slashCommand";
 import { patchPlusTeamMember } from "../../api/team.api";
-import { postTeamMember } from "../../api/team-member.api";
+import { getTeamMember, postTeamMember } from "../../api/team-member.api";
 
 export const inviteTeam: SlashCommand = {
   name: "팀초대",
@@ -43,20 +43,24 @@ export const inviteTeam: SlashCommand = {
           }
 
           const invitedMember = findMember;
-          const invitedMemberRoles = Array.from(
-            invitedMember?.guild.roles.cache.values()
-          );
           const inviterUser = interaction.member?.user.id;
 
           if (inviterUser) {
             const inviterUserRole =
               interaction.guild?.members.cache.get(inviterUser)?.roles.highest;
-
-            const invitedHasRoles = invitedMemberRoles.length > 2;
+            const invitedHasRoles = await getTeamMember(inviteName);
             if (invitedHasRoles) {
               await interaction.followUp({
                 ephemeral: true,
                 content: `❌ 이미 팀에 속해있습니다 ❌`,
+              });
+              return;
+            }
+            const inviterHasRoles = await getTeamMember(inviteName);
+            if (!inviterHasRoles) {
+              await interaction.followUp({
+                ephemeral: true,
+                content: `❌ 본인이 속한 팀이 없습니다 ❌`,
               });
               return;
             }
@@ -68,7 +72,7 @@ export const inviteTeam: SlashCommand = {
 
               await interaction.followUp({
                 ephemeral: true,
-                content: `✅ ${inviteName} 님이 팀에 초대되었습니다! ✅`,
+                content: `✅ ${inviteName} 님이 팀에 초대되었습니다!`,
               });
               postTeamMember(invitedMember.displayName, inviterUserRole.name);
               patchPlusTeamMember(inviterUserRole.name);

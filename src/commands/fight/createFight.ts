@@ -4,11 +4,12 @@ import {
   TextChannel,
 } from "discord.js";
 import { SlashCommand } from "../../types/slashCommand";
-import { fightDataInstance } from "../../data/fightData";
 import {
   GuildScheduledEventEntityType,
   GuildScheduledEventPrivacyLevel,
 } from "discord-api-types/v10";
+import { getFight, postFight } from "../../api/fight.api";
+import { getTeam } from "../../api/team.api";
 
 export const createFight: SlashCommand = {
   name: "내전생성",
@@ -41,11 +42,16 @@ export const createFight: SlashCommand = {
   ],
   execute: async (_, interaction) => {
     const fightNameOption = interaction.options.get("내전명");
-    const team1Option = interaction.options.get("본인팀");
-    const team2Option = interaction.options.get("상대팀");
+    const homeTeamOption = interaction.options.get("본인팀");
+    const awayTeamOption = interaction.options.get("상대팀");
     const fightTimeOption = interaction.options.get("내전시간");
 
-    if (!fightNameOption || !team1Option || !team2Option || !fightTimeOption) {
+    if (
+      !fightNameOption ||
+      !homeTeamOption ||
+      !awayTeamOption ||
+      !fightTimeOption
+    ) {
       await interaction.followUp({
         ephemeral: true,
         content: `❌ 미입력 확인 ❌`,
@@ -54,11 +60,12 @@ export const createFight: SlashCommand = {
     }
 
     const fightName = fightNameOption.value as string;
-    const team1 = team1Option.value as string;
-    const team2 = team2Option.value as string;
+    const homeTeam = homeTeamOption.value as string;
+    const awayTeam = awayTeamOption.value as string;
     const fightTime = fightTimeOption.value as string;
 
-    if (fightDataInstance.exists(fightName)) {
+    const existFightName = await getFight(fightName);
+    if (existFightName) {
       await interaction.followUp({
         ephemeral: true,
         content: `❌ 이미 존재하는 내전명입니다 ❌`,
@@ -95,6 +102,16 @@ export const createFight: SlashCommand = {
       return;
     }
 
+    const existHomeTeam = await getTeam(homeTeam);
+    const existAwayTeam = await getTeam(awayTeam);
+    if (!existHomeTeam || !existAwayTeam) {
+      await interaction.followUp({
+        ephemeral: true,
+        content: `❌ 본인팀 또는 상대팀이 존재하지 않습니다 ❌`,
+      });
+      return;
+    }
+
     // name: string;
     // scheduledStartTime: DateResolvable;
     // scheduledEndTime?: DateResolvable;
@@ -105,7 +122,7 @@ export const createFight: SlashCommand = {
     // entityMetadata?: GuildScheduledEventEntityMetadataOptions;
     // image?: BufferResolvable | Base64Resolvable | null;
     // reason?: string;
-    const descriptionText = team1 + "vs" + team2 + "내전";
+    const descriptionText = homeTeam + "vs" + awayTeam + "내전";
     const guildId = interaction.guild!.id;
     const guild = interaction.client.guilds.cache.get(guildId);
     const startTime = new Date(targetDate.getTime());
@@ -130,8 +147,8 @@ export const createFight: SlashCommand = {
       생성자 - ${interaction.user.displayName.toString()}
       📢   **내전 생성**   📢\n
       🔴 **내전명** : ${fightName}\n
-      🟠 **팀 A** : ${team1}\n
-      🟡 **팀 B** : ${team2}\n
+      🟠 **팀 A** : ${homeTeam}\n
+      🟡 **팀 B** : ${awayTeam}\n
       🟢 **내전시간** : ${fightTime}`;
 
     const noticeChannel = (await interaction.client.channels.fetch(
@@ -142,12 +159,7 @@ export const createFight: SlashCommand = {
       const sendMessage = await noticeChannel.send(sendContent);
       const messageId = sendMessage.id;
 
-      fightDataInstance.setData(fightName, {
-        team1: team1,
-        team2: team2,
-        fightTime: fightTime,
-        messageId: messageId,
-      });
+      postFight(fightName, homeTeam, awayTeam, startTime, messageId);
 
       interaction.deleteReply();
     }

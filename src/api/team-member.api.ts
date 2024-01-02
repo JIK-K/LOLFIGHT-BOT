@@ -34,6 +34,7 @@ export const getTeamMember = async (userName: string) => {
       },
     });
     console.log("Team-Member found by name:", team);
+    return team;
   } catch (error) {
     console.error("Error fetching team-member by name:", error);
   } finally {
