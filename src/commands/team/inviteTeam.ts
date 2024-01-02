@@ -43,11 +43,23 @@ export const inviteTeam: SlashCommand = {
           }
 
           const invitedMember = findMember;
+          const invitedMemberRoles = Array.from(
+            invitedMember?.guild.roles.cache.values()
+          );
           const inviterUser = interaction.member?.user.id;
 
           if (inviterUser) {
             const inviterUserRole =
               interaction.guild?.members.cache.get(inviterUser)?.roles.highest;
+
+            const invitedHasRoles = invitedMemberRoles.length > 2;
+            if (invitedHasRoles) {
+              await interaction.followUp({
+                ephemeral: true,
+                content: `❌ 이미 팀에 속해있습니다 ❌`,
+              });
+              return;
+            }
 
             if (inviterUserRole && invitedMember) {
               try {
@@ -60,17 +72,21 @@ export const inviteTeam: SlashCommand = {
               });
               postTeamMember(invitedMember.displayName, inviterUserRole.name);
               patchPlusTeamMember(inviterUserRole.name);
+
+              return;
             } else {
               await interaction.followUp({
                 ephemeral: true,
                 content: `❌ 초대자의 역할을 찾을 수 없습니다 ❌`,
               });
+              return;
             }
           } else {
             await interaction.followUp({
               ephemeral: true,
               content: `❌ 초대자를 찾을 수 없습니다 ❌`,
             });
+            return;
           }
         });
     }
