@@ -112,7 +112,9 @@ export const createTeam: SlashCommand = {
             interaction.deleteReply();
           }
           postTeam(teamName);
-          postTeamMember(userName, teamName);
+          setTimeout(() => {
+            postTeamMember(userName, teamName);
+          }, 100);
         }
       }
     }

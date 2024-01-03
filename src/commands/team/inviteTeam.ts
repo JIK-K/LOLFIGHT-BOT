@@ -31,8 +31,11 @@ export const inviteTeam: SlashCommand = {
         .fetch({ withPresences: true })
         .then(async (fetchedMembers) => {
           const findMember = fetchedMembers.find(
-            (member) => member.displayName === inviteName
+            (member) => member.user.displayName === inviteName
           );
+
+          console.log(inviteName);
+          console.log(findMember);
 
           if (findMember === undefined) {
             await interaction.followUp({
@@ -56,7 +59,9 @@ export const inviteTeam: SlashCommand = {
               });
               return;
             }
-            const inviterHasRoles = await getTeamMember(inviteName);
+            const inviterHasRoles = await getTeamMember(
+              interaction.user.displayName
+            );
             if (!inviterHasRoles) {
               await interaction.followUp({
                 ephemeral: true,
