@@ -1,6 +1,6 @@
 import { ApplicationCommandOptionType, TextChannel } from "discord.js";
 import { SlashCommand } from "../../types/slashCommand";
-import { getFight } from "../../api/fight.api";
+import { getFight, removeFight } from "../../api/fight.api";
 
 const NOTICE_CHANNEL: string =
   process.env.NOTICE_CHANNEL || "1176823090416730193";
@@ -39,6 +39,7 @@ export const deleteFight: SlashCommand = {
         const deleteMessage = await channel.messages.fetch(fight.messageId);
         if (deleteMessage) {
           await deleteMessage.delete();
+          await removeFight(fightName);
         }
       } else {
         await interaction.followUp({

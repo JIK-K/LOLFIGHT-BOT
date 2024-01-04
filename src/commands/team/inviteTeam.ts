@@ -34,9 +34,6 @@ export const inviteTeam: SlashCommand = {
             (member) => member.user.displayName === inviteName
           );
 
-          console.log(inviteName);
-          console.log(findMember);
-
           if (findMember === undefined) {
             await interaction.followUp({
               ephemeral: true,

@@ -73,7 +73,7 @@ export const getFightList = async () => {
  * @내전삭제
  * @param fightName
  */
-export const removeTeam = async (fightName: string) => {
+export const removeFight = async (fightName: string) => {
   try {
     const deletedFight = await prisma.fight.delete({
       where: {
