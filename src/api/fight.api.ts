@@ -70,6 +70,29 @@ export const getFightList = async () => {
 };
 
 /**
+ * @내전승자
+ * @param fightName
+ */
+export const patchFight = async (fightName: string) => {
+  try {
+    const fight = await prisma.fight.update({
+      where: {
+        name: fightName,
+      },
+      data: {
+        status: "E",
+      },
+    });
+    console.log("Fight found by fightName:", fight);
+    return fight;
+  } catch (error) {
+    console.error("Error fetching Fight by fightName:", error);
+  } finally {
+    await prisma.$disconnect();
+  }
+};
+
+/**
  * @내전삭제
  * @param fightName
  */

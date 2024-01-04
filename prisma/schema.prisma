@@ -15,8 +15,10 @@ model Team {
   name String @unique
   numberMembers Int @default(1)
   members Team_Member[] // Team과 Team_Member 간의 관계 설정
-  fightsAsHome  Fight[]    @relation("homeTeamRelation") // Fight 모델의 teamHome과 관련된 역 관계 필드
-  fightsAsAway  Fight[]    @relation("awayTeamRelation") // Fight 모델의 teamAway와 관련된 역 관계 필드
+  fightsAsHome  Fight[] @relation("homeTeamRelation") // Fight 모델의 teamHome과 관련된 역 관계 필드
+  fightsAsAway  Fight[] @relation("awayTeamRelation") // Fight 모델의 teamAway와 관련된 역 관계 필드
+  victory Int @default(0)
+  defeat Int @default(0)
   createdAt DateTime @default(now()) // createdAt 필드 추가
   updatedAt DateTime @updatedAt   // updatedAt 필드 추가
 }
@@ -26,6 +28,7 @@ model Team_Member {
   name String @unique 
   team Team? @relation(fields: [teamName], references: [name], onDelete: Cascade)
   teamName String? // Team 테이블의 name을 참조
+  tier String?
   createdAt DateTime @default(now()) // createdAt 필드 추가
   updatedAt DateTime @updatedAt   // updatedAt 필드 추가
 }
@@ -39,6 +42,7 @@ model Fight {
   awayTeam String?
   fightTime DateTime
   messageId String
+  status String @default("R") //(Running : 진행중[R], End : 종료[E])
   createdAt DateTime @default(now()) // createdAt 필드 추가
   updatedAt DateTime @updatedAt   // updatedAt 필드 추가
 }

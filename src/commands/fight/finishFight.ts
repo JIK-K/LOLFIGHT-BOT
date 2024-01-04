@@ -1,6 +1,6 @@
 import { ApplicationCommandOptionType, Message, TextChannel } from "discord.js";
 import { SlashCommand } from "../../types/slashCommand";
-import { getFight } from "../../api/fight.api";
+import { getFight, patchFight } from "../../api/fight.api";
 
 const NOTICE_CHANNEL: string =
   process.env.NOTICE_CHANNEL || "1176823090416730193";
@@ -57,6 +57,7 @@ export const finishFight: SlashCommand = {
           await message.edit(modifiedContent);
 
           interaction.deleteReply();
+          await patchFight(fightName);
         }
       } else {
         await interaction.followUp({
