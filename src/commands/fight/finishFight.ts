@@ -1,6 +1,7 @@
 import { ApplicationCommandOptionType, Message, TextChannel } from "discord.js";
 import { SlashCommand } from "../../types/slashCommand";
 import { getFight, patchFight } from "../../api/fight.api";
+import { patchDefeatTeam, patchVictoryTeam } from "../../api/team.api";
 
 const NOTICE_CHANNEL: string =
   process.env.NOTICE_CHANNEL || "1176823090416730193";
@@ -37,6 +38,8 @@ export const finishFight: SlashCommand = {
     const fightName = fightNameOption.value as string;
     const winnerTeam = winnerTeamOption.value as string;
     const fight = await getFight(fightName);
+    const guildId = interaction.guild!.id;
+    const guild = interaction.client.guilds.cache.get(guildId);
 
     if (fight) {
       const channel = (await interaction.client.channels.fetch(
@@ -50,14 +53,22 @@ export const finishFight: SlashCommand = {
           const modifiedContent = `
           📢   **내전 종료**   📢\n
           🔴 **내전명** : ${fightName}\n
-          🟠 **팀 A** : ${fight.homeTeam}\n
-          🟡 **팀 B** : ${fight.awayTeam}\n
+          🟠 **Home 팀** : ${fight.homeTeam}\n
+          🟡 **Away 팀** : ${fight.awayTeam}\n
           🟢 **내전시간** : ${fight.fightTime}\n
           🏆 **Winner**: **${winnerTeam}** 🏆`;
           await message.edit(modifiedContent);
 
           interaction.deleteReply();
+          guild?.scheduledEvents.delete(fight.eventId);
           await patchFight(fightName);
+          if (winnerTeam === fight.homeTeam) {
+            await patchVictoryTeam(fight.homeTeam!);
+            await patchDefeatTeam(fight.awayTeam!);
+          } else {
+            await patchVictoryTeam(fight.awayTeam!);
+            await patchDefeatTeam(fight.homeTeam!);
+          }
         }
       } else {
         await interaction.followUp({

@@ -104,6 +104,52 @@ export const patchSubtractTeamMember = async (teamName: string) => {
 };
 
 /**
+ * @팀우승
+ * @param teamName
+ */
+export const patchVictoryTeam = async (teamName: string) => {
+  try {
+    const updateTeam = await prisma.team.update({
+      where: {
+        name: teamName,
+      },
+      data: {
+        victory: {
+          increment: 1,
+        },
+      },
+    });
+  } catch (error) {
+    console.error("Error updating team victory", error);
+  } finally {
+    await prisma.$disconnect();
+  }
+};
+
+/**
+ * @팀패배
+ * @param teamName
+ */
+export const patchDefeatTeam = async (teamName: string) => {
+  try {
+    const updateTeam = await prisma.team.update({
+      where: {
+        name: teamName,
+      },
+      data: {
+        defeat: {
+          increment: 1,
+        },
+      },
+    });
+  } catch (error) {
+    console.error("Error updating team victory", error);
+  } finally {
+    await prisma.$disconnect();
+  }
+};
+
+/**
  * @팀삭제
  * @param teamName
  */

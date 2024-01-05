@@ -28,7 +28,8 @@ export const deleteFight: SlashCommand = {
     }
 
     const fightName = fightNameOption.value as string;
-
+    const guildId = interaction.guild!.id;
+    const guild = interaction.client.guilds.cache.get(guildId);
     const fight = await getFight(fightName);
     interaction.deleteReply();
     if (fight) {
@@ -39,6 +40,7 @@ export const deleteFight: SlashCommand = {
         const deleteMessage = await channel.messages.fetch(fight.messageId);
         if (deleteMessage) {
           await deleteMessage.delete();
+          guild?.scheduledEvents.delete(fight.eventId);
           await removeFight(fightName);
         }
       } else {

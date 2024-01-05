@@ -139,29 +139,28 @@ export const createFight: SlashCommand = {
       channel: "1175700332198756452",
     };
 
-    guild?.scheduledEvents.create(options).then((createEvnent) => {
-      console.log(`create event id : ${createEvnent.id}`);
-    });
-
-    const sendContent = `
+    guild?.scheduledEvents.create(options).then(async (createEvnent) => {
+      const sendContent = `
       생성자 - ${interaction.user.displayName.toString()}
       📢   **내전 생성**   📢\n
       🔴 **내전명** : ${fightName}\n
-      🟠 **팀 A** : ${homeTeam}\n
-      🟡 **팀 B** : ${awayTeam}\n
+      🟠 **Home 팀** : ${homeTeam}\n
+      🟡 **Away 팀** : ${awayTeam}\n
       🟢 **내전시간** : ${fightTime}`;
 
-    const noticeChannel = (await interaction.client.channels.fetch(
-      "1176823090416730193"
-    )) as TextChannel;
+      const noticeChannel = (await interaction.client.channels.fetch(
+        "1176823090416730193"
+      )) as TextChannel;
 
-    if (noticeChannel) {
-      const sendMessage = await noticeChannel.send(sendContent);
-      const messageId = sendMessage.id;
+      if (noticeChannel) {
+        const sendMessage = await noticeChannel.send(sendContent);
+        const messageId = sendMessage.id;
+        const eventId = createEvnent.id;
+        postFight(fightName, homeTeam, awayTeam, startTime, messageId, eventId);
 
-      postFight(fightName, homeTeam, awayTeam, startTime, messageId);
-
-      interaction.deleteReply();
-    }
+        interaction.deleteReply();
+      }
+      console.log(`create event id : ${createEvnent.id}`);
+    });
   },
 };

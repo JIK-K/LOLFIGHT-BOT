@@ -42,6 +42,7 @@ model Fight {
   awayTeam String?
   fightTime DateTime
   messageId String
+  eventId String
   status String @default("R") //(Running : 진행중[R], End : 종료[E])
   createdAt DateTime @default(now()) // createdAt 필드 추가
   updatedAt DateTime @updatedAt   // updatedAt 필드 추가

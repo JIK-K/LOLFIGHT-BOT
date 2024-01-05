@@ -14,9 +14,11 @@ export const postFight = async (
   homeTeamName: string,
   awayTeamName: string,
   fightTime: Date,
-  messageId: string
+  messageId: string,
+  eventId: string
 ) => {
   try {
+    console.log(eventId);
     const newFight = await prisma.fight.create({
       data: {
         name: fightName,
@@ -24,6 +26,7 @@ export const postFight = async (
         awayTeam: awayTeamName,
         fightTime: fightTime,
         messageId: messageId,
+        eventId: eventId,
       },
     });
     console.log("Created Fight:", newFight);
