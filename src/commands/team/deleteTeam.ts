@@ -1,6 +1,7 @@
 import { ApplicationCommandOptionType, TextChannel } from "discord.js";
 import { SlashCommand } from "../../types/slashCommand";
 import { removeTeam } from "../../api/team.api";
+import { getFight } from "../../api/fight.api";
 
 export const deleteTeam: SlashCommand = {
   name: "팀삭제",
@@ -34,6 +35,14 @@ export const deleteTeam: SlashCommand = {
         content: `❌ 존재하지 않는 팀명입니다 ❌`,
       });
       return;
+    }
+
+    const remainFight = await getFight(teamName);
+    if (remainFight) {
+      await interaction.followUp({
+        ephemeral: true,
+        content: `❌ 이미 진행중인 내전이 존재합니다 ❌`,
+      });
     }
 
     const member = interaction.guild?.members.cache.get(interaction.user.id);
