@@ -4,7 +4,7 @@ import {
   TextChannel,
 } from "discord.js";
 import { SlashCommand } from "../../types/slashCommand";
-import { patchPlusTeamMember, postTeam } from "../../api/team.api";
+import { postTeam } from "../../api/team.api";
 import { getTeamMember, postTeamMember } from "../../api/team-member.api";
 
 const getRandomColor = (): ColorResolvable => {
@@ -100,17 +100,12 @@ export const createTeam: SlashCommand = {
               await newMember.roles.add(totalRole.id);
             } catch (error) {}
           }
-          const sendContent = `
-      ✅ ${interaction.user.displayName.toString()} 님이 ${teamName} 팀을 생성 하셨습니다.`;
 
-          const noticeChannel = (await interaction.client.channels.fetch(
-            "1175701624866471986"
-          )) as TextChannel;
+          await interaction.followUp({
+            ephemeral: true,
+            content: `✅ ${interaction.user.displayName.toString()} 님이 ${teamName} 팀을 생성 하셨습니다.`,
+          });
 
-          if (noticeChannel) {
-            await noticeChannel.send(sendContent);
-            interaction.deleteReply();
-          }
           postTeam(teamName);
           setTimeout(() => {
             postTeamMember(userName, teamName);

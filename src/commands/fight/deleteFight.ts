@@ -3,7 +3,7 @@ import { SlashCommand } from "../../types/slashCommand";
 import { getFight, removeFight } from "../../api/fight.api";
 
 const NOTICE_CHANNEL: string =
-  process.env.NOTICE_CHANNEL || "1176823090416730193";
+  process.env.NOTICE_CHANNEL || "1176779943510806528";
 
 export const deleteFight: SlashCommand = {
   name: "내전삭제",

@@ -140,16 +140,12 @@ export const createFight: SlashCommand = {
     };
 
     guild?.scheduledEvents.create(options).then(async (createEvnent) => {
+      console.log(`생성자 - ${interaction.user.displayName.toString()}`);
       const sendContent = `
-      생성자 - ${interaction.user.displayName.toString()}
-      📢   **내전 생성**   📢\n
-      🔴 **내전명** : ${fightName}\n
-      🟠 **Home 팀** : ${homeTeam}\n
-      🟡 **Away 팀** : ${awayTeam}\n
-      🟢 **내전시간** : ${fightTime}`;
+      📢   **내전 생성**   📢\n🔴 **내전명** : ${fightName}\n🟠 ${homeTeam} VS ${awayTeam}\n🟡 **내전시간** : ${fightTime}`;
 
       const noticeChannel = (await interaction.client.channels.fetch(
-        "1176823090416730193"
+        "1176779943510806528"
       )) as TextChannel;
 
       if (noticeChannel) {

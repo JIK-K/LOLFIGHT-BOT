@@ -4,7 +4,7 @@ import { getFight, patchFight } from "../../api/fight.api";
 import { patchDefeatTeam, patchVictoryTeam } from "../../api/team.api";
 
 const NOTICE_CHANNEL: string =
-  process.env.NOTICE_CHANNEL || "1176823090416730193";
+  process.env.NOTICE_CHANNEL || "1176779943510806528";
 
 export const finishFight: SlashCommand = {
   name: "내전우승",
@@ -51,11 +51,7 @@ export const finishFight: SlashCommand = {
         )) as Message;
         if (message) {
           const modifiedContent = `
-          📢   **내전 종료**   📢\n
-          🔴 **내전명** : ${fightName}\n
-          🟠 **Home 팀** : ${fight.homeTeam}\n
-          🟡 **Away 팀** : ${fight.awayTeam}\n
-          🟢 **내전시간** : ${fight.fightTime}\n
+          📢   **내전 종료**   📢\n🔴 **내전명** : ${fightName}\n🟠 ${fight.homeTeam} VS ${fight.awayTeam}\n🟡 **내전시간** : ${fight.fightTime}\n
           🏆 **Winner**: **${winnerTeam}** 🏆`;
           await message.edit(modifiedContent);
 
